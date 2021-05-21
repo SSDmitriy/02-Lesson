@@ -15,7 +15,6 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class StudentRegistrationFormTest {
 
-
     /**
      * @BeforAll
      * @BeforeEach
@@ -36,6 +35,40 @@ public class StudentRegistrationFormTest {
         Configuration.startMaximized = true;
     }
 
+    String urlForTest = "https://demoqa.com/automation-practice-form";
+
+    @Test
+    void checkRegistrationForm() {
+    open(urlForTest);
+
+        String firstNameForTest = "Darth";
+        String lastNameForTest = "Vader";
+        String emailForTest = "Vader@mail.ru";
+        String phoneNumberForTest = "9876543210";
+        String dobForTest = "01 Oct 1977";
+        String subjectsForTest = "Arts, Biology, Physics";
+
+
+
+
+        $("[id=firstName]").setValue(firstNameForTest);
+        $("#lastName").setValue(lastNameForTest);
+        $("#userEmail").setValue(emailForTest);
+        $("#userEmail").setValue(emailForTest);
+
+        $("[for='gender-radio-3']").click();
+        $("#userNumber").setValue(phoneNumberForTest);
+        $("#dateOfBirthInput").setValue(dobForTest);
+
+        //subjectsContainer
+//        hobbies-checkbox-1
+//        hobbies-checkbox-3
+//        uploadPicture
+
+
+
+    }
+/*
     @BeforeEach
     void openGooglePage() {
         logger.info("@BeforeEach");
@@ -53,4 +86,17 @@ public class StudentRegistrationFormTest {
         $(byName("q")).setValue("Wikipedia").pressEnter();
         $("#search").shouldHave(text("Wikipedia.org"));
     }
+
+    @Test
+    void selenideSearchTest() {
+        $(byName("q")).setValue("Selenide").pressEnter();
+        $("#search").shouldHave(text("selenide.org"));
+    }
+
+    @Test
+    void allureSearchTest() {
+        $(byName("q")).setValue("Allure testops").pressEnter();
+        $("#search").shouldHave(text("qameta.io"));
+    }
+*/
 }
