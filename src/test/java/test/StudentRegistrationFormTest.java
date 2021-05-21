@@ -56,6 +56,7 @@ public class StudentRegistrationFormTest {
         $("#userEmail").setValue(emailForTest);
         $("#userEmail").setValue(emailForTest);
 
+        //Здесь неясно, как кликнуть
         $("[for='gender-radio-3']").click();
         $("#userNumber").setValue(phoneNumberForTest);
         $("#dateOfBirthInput").setValue(dobForTest);
