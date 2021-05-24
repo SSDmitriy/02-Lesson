@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.*;
@@ -39,33 +41,72 @@ public class StudentRegistrationFormTest {
 
     @Test
     void checkRegistrationForm() {
-    open(urlForTest);
+        open(urlForTest);
 
+        //test data
         String firstNameForTest = "Darth";
         String lastNameForTest = "Vader";
         String emailForTest = "Vader@mail.ru";
         String phoneNumberForTest = "9876543210";
         String dobForTest = "01 Oct 1977";
-        String subjectsForTest = "Arts, Biology, Physics";
+        String subjectOneForTest = "Arts";
+        String subjectTwoForTest = "Biology";
+        String subjectThreeForTest = "Physics";
+        File testJpgFile = new File("src/test/testData/testJPG.jpg");
+        String currentAddress = "Text for textarea \"Current Address\"";
+        String stateForTest = "NCR";
+        String cityForTest = "Guardon";
 
-
-
-
+//find and fill elements
+        // Name
         $("[id=firstName]").setValue(firstNameForTest);
         $("#lastName").setValue(lastNameForTest);
         $("#userEmail").setValue(emailForTest);
         $("#userEmail").setValue(emailForTest);
 
+        //radiobutton "Gender"
         $("[for='gender-radio-3']").click();
+
         $("#userNumber").setValue(phoneNumberForTest);
-        $("#dateOfBirthInput").setValue(dobForTest);
+        $("#dateOfBirthInput").setValue(dobForTest).pressEnter();
 
-        //subjectsContainer
-//        hobbies-checkbox-1
-//        hobbies-checkbox-3
-//        uploadPicture
+        $("#subjectsInput").setValue(subjectOneForTest).pressEnter();
+        $("#subjectsInput").setValue(subjectTwoForTest).pressEnter();
+        $("#subjectsInput").setValue(subjectThreeForTest).pressEnter();
 
+        //checkboxes (2 from 3)
+        $("[for='hobbies-checkbox-1']").click();
+        $("[for='hobbies-checkbox-3']").click();
 
+        //upload file
+        $("#uploadPicture").uploadFile(testJpgFile);
+
+        $("#currentAddress").setValue(currentAddress);
+
+        //dropdown select
+        $("#react-select-3-input").setValue(stateForTest).pressEnter();
+        $("#react-select-4-input").setValue(cityForTest).pressEnter();
+
+        //press SUBMIT
+        $("#submit").click();
+
+//checking data
+        $(".table-responsive").shouldHave(
+                text(firstNameForTest),
+                text(lastNameForTest),
+                text(emailForTest),
+                text(phoneNumberForTest),
+                text(dobForTest),
+                text(subjectOneForTest),
+                text(subjectTwoForTest),
+                text(subjectThreeForTest),
+                text("testJPG.jpg"),
+                text(currentAddress),
+                text(stateForTest),
+                text(cityForTest)
+        );
+
+        $("#closeLargeModal").click();
 
     }
 /*
