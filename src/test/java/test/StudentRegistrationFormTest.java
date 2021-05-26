@@ -12,10 +12,11 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.*;
 
 public class StudentRegistrationFormTest {
+
+    static Logger logger = LoggerFactory.getLogger(StudentRegistrationFormTest.class);
 
     /**
      * @BeforAll
@@ -28,8 +29,6 @@ public class StudentRegistrationFormTest {
      * @AfterAll
      */
 
-    static Logger logger = LoggerFactory.getLogger(StudentRegistrationFormTest.class);
-
     @BeforeAll
     static void setUpConfig() {
         logger.info("@BeforeAll");
@@ -37,79 +36,6 @@ public class StudentRegistrationFormTest {
         Configuration.startMaximized = true;
     }
 
-    String urlForTest = "https://demoqa.com/automation-practice-form";
-
-    @Test
-    void checkRegistrationForm() {
-        open(urlForTest);
-
-        //test data
-        String firstNameForTest = "Darth";
-        String lastNameForTest = "Vader";
-        String emailForTest = "Vader@mail.ru";
-        String phoneNumberForTest = "9876543210";
-        String dobForTest = "01 Oct 1977";
-        String subjectOneForTest = "Arts";
-        String subjectTwoForTest = "Biology";
-        String subjectThreeForTest = "Physics";
-        File testJpgFile = new File("src/test/testData/testJPG.jpg");
-        String currentAddress = "Text for textarea \"Current Address\"";
-        String stateForTest = "NCR";
-        String cityForTest = "Guardon";
-
-//find and fill elements
-        // Name
-        $("[id=firstName]").setValue(firstNameForTest);
-        $("#lastName").setValue(lastNameForTest);
-        $("#userEmail").setValue(emailForTest);
-        $("#userEmail").setValue(emailForTest);
-
-        //radiobutton "Gender"
-        $("[for='gender-radio-3']").click();
-
-        $("#userNumber").setValue(phoneNumberForTest);
-        $("#dateOfBirthInput").setValue(dobForTest).pressEnter();
-
-        $("#subjectsInput").setValue(subjectOneForTest).pressEnter();
-        $("#subjectsInput").setValue(subjectTwoForTest).pressEnter();
-        $("#subjectsInput").setValue(subjectThreeForTest).pressEnter();
-
-        //checkboxes (2 from 3)
-        $("[for='hobbies-checkbox-1']").click();
-        $("[for='hobbies-checkbox-3']").click();
-
-        //upload file
-        $("#uploadPicture").uploadFile(testJpgFile);
-
-        $("#currentAddress").setValue(currentAddress);
-
-        //dropdown select
-        $("#react-select-3-input").setValue(stateForTest).pressEnter();
-        $("#react-select-4-input").setValue(cityForTest).pressEnter();
-
-        //press SUBMIT
-        $("#submit").click();
-
-//checking data
-        $(".table-responsive").shouldHave(
-                text(firstNameForTest),
-                text(lastNameForTest),
-                text(emailForTest),
-                text(phoneNumberForTest),
-                text(dobForTest),
-                text(subjectOneForTest),
-                text(subjectTwoForTest),
-                text(subjectThreeForTest),
-                text("testJPG.jpg"),
-                text(currentAddress),
-                text(stateForTest),
-                text(cityForTest)
-        );
-
-        $("#closeLargeModal").click();
-
-    }
-/*
     @BeforeEach
     void openGooglePage() {
         logger.info("@BeforeEach");
@@ -122,22 +48,100 @@ public class StudentRegistrationFormTest {
         closeWebDriver();
     }
 
-    @Test
-    void wikipediaSearchTest() {
-        $(byName("q")).setValue("Wikipedia").pressEnter();
-        $("#search").shouldHave(text("Wikipedia.org"));
-    }
+//TEST_DATA
+        String urlForTest = "https://demoqa.com/automation-practice-form";
 
-    @Test
-    void selenideSearchTest() {
-        $(byName("q")).setValue("Selenide").pressEnter();
-        $("#search").shouldHave(text("selenide.org"));
-    }
+        String firstNameForTest = "Darth";
+        String lastNameForTest = "Vader";
+        String emailForTest = "Vader@mail.ru";
+        String phoneNumberForTest = "9876543210";
 
+        String dateForTest = "25 May,1977";
+        String monthForTest = "May";
+        String yearForTest = "1977";
+
+        String subjectOneForTest = "Arts";
+        String subjectTwoForTest = "Biology";
+        String subjectThreeForTest = "Physics";
+
+        String fileNameForTest = "testJPG.jpg";
+            File testJpgFile = new File("src/test/testData/" + fileNameForTest);
+
+        String currentAddress = "Just a text for textarea \"Current Address\"";
+        String stateForTest = "NCR";
+        String cityForTest = "Gurgaon";
+
+//end of TEST_DATA
+
+
+//begin TEST
     @Test
-    void allureSearchTest() {
-        $(byName("q")).setValue("Allure testops").pressEnter();
-        $("#search").shouldHave(text("qameta.io"));
+    void checkRegistrationForm() {
+        open(urlForTest);
+
+//find and fill elements
+        // Name
+        $("[id=firstName]").setValue(firstNameForTest);
+        $("#lastName").setValue(lastNameForTest);
+        $("#userEmail").setValue(emailForTest);
+        $("#userEmail").setValue(emailForTest);
+
+//radiobutton "Gender"
+        $("[for='gender-radio-3']").click();
+
+//phone number
+        $("#userNumber").setValue(phoneNumberForTest);
+
+//clicking on dob
+        $("#dateOfBirthInput").click();
+        $(".react-datepicker__month-select").selectOption(monthForTest);
+        $(".react-datepicker__year-select").selectOption(yearForTest);
+        //здесь слабое место - дата захардкожена
+        $("[aria-label='Choose Wednesday, May 25th, 1977']").click();
+
+//subjects in tokenfield
+        $("#subjectsInput").setValue(subjectOneForTest).pressEnter();
+        $("#subjectsInput").setValue(subjectTwoForTest).pressEnter();
+        $("#subjectsInput").setValue(subjectThreeForTest).pressEnter();
+
+//hobby-checkboxes (2 from 3)
+        $("[for='hobbies-checkbox-1']").click();
+        $("[for='hobbies-checkbox-3']").click();
+
+//upload file
+        $("#uploadPicture").uploadFile(testJpgFile);
+
+//fill textbox
+        $("#currentAddress").setValue(currentAddress);
+
+//dropdown select state&city
+        $("#react-select-3-input").setValue(stateForTest).pressEnter();
+        $("#react-select-4-input").setValue(cityForTest).pressEnter();
+
+//press SUBMIT
+        $("#submit").click();
+
+
+//CHECKING_DATA
+        $(".table-responsive").shouldHave(text(firstNameForTest));
+        $(".table-responsive").shouldHave(text(emailForTest));
+        $(".table-responsive").shouldHave(text(phoneNumberForTest));
+        $(".table-responsive").shouldHave(text(dateForTest));
+        $(".table-responsive").shouldHave(text(firstNameForTest));
+        $(".table-responsive").shouldHave(text(lastNameForTest));
+        $(".table-responsive").shouldHave(text(emailForTest));
+        $(".table-responsive").shouldHave(text(phoneNumberForTest));
+        $(".table-responsive").shouldHave(text(dateForTest));
+        $(".table-responsive").shouldHave(text(subjectOneForTest));
+        $(".table-responsive").shouldHave(text(subjectTwoForTest));
+        $(".table-responsive").shouldHave(text(subjectThreeForTest));
+        $(".table-responsive").shouldHave(text(fileNameForTest));
+        $(".table-responsive").shouldHave(text(currentAddress));
+        $(".table-responsive").shouldHave(text(stateForTest));
+        $(".table-responsive").shouldHave(text(cityForTest));
+
+//close modal window
+        $("#closeLargeModal").click();
+
     }
-*/
 }
