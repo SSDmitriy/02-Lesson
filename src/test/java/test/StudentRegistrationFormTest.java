@@ -39,14 +39,8 @@ public class StudentRegistrationFormTest {
     @BeforeEach
     void openGooglePage() {
         logger.info("@BeforeEach");
-        open("https://www.google.com");
     }
 
-    @AfterEach
-    void closeBrowser() {
-        logger.info("@AfterEach");
-        closeWebDriver();
-    }
 
 //TEST_DATA
         String urlForTest = "https://demoqa.com/automation-practice-form";
@@ -65,7 +59,7 @@ public class StudentRegistrationFormTest {
         String subjectThreeForTest = "Physics";
 
         String fileNameForTest = "testJPG.jpg";
-            File testJpgFile = new File("src/test/testData/" + fileNameForTest);
+        File testJpgFile = new File("src/resources/" + fileNameForTest);
 
         String currentAddress = "Just a text for textarea \"Current Address\"";
         String stateForTest = "NCR";
@@ -81,7 +75,7 @@ public class StudentRegistrationFormTest {
 
 //find and fill elements
         // Name
-        $("[id=firstName]").setValue(firstNameForTest);
+        $("#firstName").setValue(firstNameForTest);
         $("#lastName").setValue(lastNameForTest);
         $("#userEmail").setValue(emailForTest);
         $("#userEmail").setValue(emailForTest);
@@ -139,9 +133,6 @@ public class StudentRegistrationFormTest {
         $(".table-responsive").shouldHave(text(currentAddress));
         $(".table-responsive").shouldHave(text(stateForTest));
         $(".table-responsive").shouldHave(text(cityForTest));
-
-//close modal window
-        $("#closeLargeModal").click();
 
     }
 }
